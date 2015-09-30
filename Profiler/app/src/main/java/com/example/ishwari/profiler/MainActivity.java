@@ -7,7 +7,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-
+import android.content.Intent;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -63,8 +63,10 @@ public class MainActivity extends AppCompatActivity implements
                  * visualize the "insertion animation" (no animation happens
                  * when items are appended at the end).
                  */
-                itemList.add(0, "Item #" + nextItemNumber++);
-                adapter.notifyItemInserted(0);
+                //itemList.add(0, "Profile #" + nextItemNumber++);
+                //adapter.notifyItemInserted(0);
+                Intent intent = new Intent(MainActivity.this, Triggers.class);
+                startActivity(intent);
             }
         });
     }
