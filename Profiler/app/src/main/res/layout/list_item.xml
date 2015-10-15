@@ -17,7 +17,7 @@ More complex lists typically display more information.
     card_view:cardUseCompatPadding="true">
 
     <TextView
-        android:text="@string/checking"
+
         android:id="@+id/item_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
