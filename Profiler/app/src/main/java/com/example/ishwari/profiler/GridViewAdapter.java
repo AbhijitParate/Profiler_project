@@ -63,9 +63,13 @@ public class GridViewAdapter extends BaseAdapter {
             R.drawable.ic_brightness_low_24dp,
             R.drawable.ic_airplanemode_off_24dp,
             R.drawable.ic_airplanemode_on,
+            R.drawable.ic_bluetooth_24dp,
+            R.drawable.ic_bluetooth_disabled_24dp,
             R.drawable.ic_vibration_24dp,
             R.drawable.ic_volume_off_24dp,
-            R.drawable.ic_volume_up_24dp
+            R.drawable.ic_volume_up_24dp,
+            R.drawable.ic_screen_rotation_24dp,
+            R.drawable.ic_screen_lock_rotation_24dp
 
 
 
