@@ -47,94 +47,29 @@ public class GridViewAdapter extends BaseAdapter {
         }
         imageView.setImageResource(mThumbIds[position]);
         return imageView;
+
+
+
+
+
     }
 
 
     public Integer[] mThumbIds = {
-            R.drawable.ic_brightness_high,
-            R.drawable.ic_brightness_high,
-            R.drawable.ic_brightness_high,
-            R.drawable.ic_brightness_high,
-            R.drawable.ic_brightness_high,
-            R.drawable.ic_brightness_high,
-            R.drawable.ic_brightness_high,
-            R.drawable.ic_brightness_high,
-            R.drawable.ic_brightness_high,
-            R.drawable.ic_brightness_high,
-            R.drawable.ic_brightness_high,
-            R.drawable.ic_brightness_high,
-            R.drawable.ic_brightness_high,
-            R.drawable.ic_brightness_high,
-            R.drawable.ic_brightness_high,
-            R.drawable.ic_brightness_high,
-            R.drawable.ic_brightness_high,
-            R.drawable.ic_brightness_high,
-            R.drawable.ic_brightness_high,
-            R.drawable.ic_brightness_high,
-            R.drawable.ic_brightness_high,
-            R.drawable.ic_brightness_high,
-            R.drawable.ic_vibration_24dp, R.drawable.ic_vibration_24dp, R.drawable.ic_vibration_24dp,
-            R.drawable.ic_vibration_24dp,
-            R.drawable.ic_vibration_24dp,
-            R.drawable.ic_vibration_24dp,
-            R.drawable.ic_vibration_24dp,
-            R.drawable.ic_vibration_24dp,
-            R.drawable.ic_vibration_24dp,
-            R.drawable.ic_vibration_24dp,
-            R.drawable.ic_vibration_24dp,
-            R.drawable.ic_vibration_24dp,
-            R.drawable.ic_vibration_24dp,
-            R.drawable.ic_vibration_24dp,
-            R.drawable.ic_vibration_24dp,
-            R.drawable.ic_vibration_24dp,
-            R.drawable.ic_vibration_24dp,
-            R.drawable.ic_vibration_24dp,
-            R.drawable.ic_vibration_24dp,
-            R.drawable.ic_vibration_24dp,
-            R.drawable.ic_vibration_24dp,
-            R.drawable.ic_vibration_24dp,
-            R.drawable.ic_vibration_24dp,
+           R.drawable.ic_signal_wifi_4_bar_24dp,
             R.drawable.ic_signal_wifi_off_24dp,
-            R.drawable.ic_signal_wifi_off_24dp,
-            R.drawable.ic_signal_wifi_off_24dp,
-            R.drawable.ic_signal_wifi_off_24dp,
-            R.drawable.ic_signal_wifi_off_24dp,
-            R.drawable.ic_signal_wifi_off_24dp,
-            R.drawable.ic_signal_wifi_off_24dp,
-            R.drawable.ic_signal_wifi_off_24dp,
-            R.drawable.ic_signal_wifi_off_24dp,
-            R.drawable.ic_signal_wifi_off_24dp,
-            R.drawable.ic_signal_wifi_off_24dp,
-            R.drawable.ic_signal_wifi_off_24dp,
-            R.drawable.ic_signal_wifi_off_24dp,
-            R.drawable.ic_signal_wifi_off_24dp,
-            R.drawable.ic_signal_wifi_off_24dp,
-            R.drawable.ic_signal_wifi_off_24dp,
-            R.drawable.ic_signal_wifi_off_24dp,
-            R.drawable.ic_signal_wifi_off_24dp,
-            R.drawable.ic_signal_wifi_off_24dp,
+            R.drawable.ic_brightness_high_24dp,
+            R.drawable.ic_brightness_medium_24dp,
+            R.drawable.ic_brightness_low_24dp,
+            R.drawable.ic_airplanemode_off_24dp,
             R.drawable.ic_airplanemode_on,
-            R.drawable.ic_airplanemode_on,
+            R.drawable.ic_vibration_24dp,
+            R.drawable.ic_volume_off_24dp,
+            R.drawable.ic_volume_up_24dp
 
-            R.drawable.ic_airplanemode_on,
 
-            R.drawable.ic_airplanemode_on,
 
-            R.drawable.ic_airplanemode_on,
 
-            R.drawable.ic_airplanemode_on,
-
-            R.drawable.ic_airplanemode_on,
-
-            R.drawable.ic_airplanemode_on,
-
-            R.drawable.ic_airplanemode_on,
-
-            R.drawable.ic_airplanemode_on,
-
-            R.drawable.ic_airplanemode_on,
-
-            R.drawable.ic_airplanemode_on,
 
 
 
