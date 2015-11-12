@@ -79,9 +79,9 @@ public class MainActivity extends Activity {
         findViewById(R.id.fab_action_2).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(MainActivity.this, MapViewer.class);
+                Intent intent = new Intent(MainActivity.this, AddLocation.class);
                 startActivity(intent);
-                Toast toast = Toast.makeText(getApplicationContext(), "Map View", Toast.LENGTH_SHORT);
+                Toast toast = Toast.makeText(getApplicationContext(), "Select Place", Toast.LENGTH_SHORT);
                 toast.show();
             }
         });
