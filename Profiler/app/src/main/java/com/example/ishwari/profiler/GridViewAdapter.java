@@ -7,6 +7,11 @@ import android.widget.BaseAdapter;
 import android.widget.GridView;
 import android.widget.ImageView;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 /**
  * Created by siddhartha on 10/21/15.
  */
@@ -16,6 +21,10 @@ public class GridViewAdapter extends BaseAdapter {
     //""};
 
     private Context mContext;
+    private static final int WHITE = 0;
+    private static final int TEAL = 1;
+    private static final int MAROON = 2;
+    private List<Integer> mStates = new ArrayList<Integer>();
 
     public GridViewAdapter(Context c) {
         mContext = c;
@@ -52,6 +61,7 @@ public class GridViewAdapter extends BaseAdapter {
 
 
     }
+
 
 
     public Integer[] mThumbIds = {

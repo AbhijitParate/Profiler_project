@@ -41,15 +41,7 @@
             </intent-filter>
         </activity>
 
-        <!-- <activity
-             android:name=".Triggers"
-             android:label="@string/trigger_select">
-              <intent-filter>
-              <action android:name="android.intent.action.MAINACTIVITY" />
 
-              <category android:name="android.intent.category.DEFAULT" />
-          </intent-filter>
-        </activity>-->
 
 
         <activity
