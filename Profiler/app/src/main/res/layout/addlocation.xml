@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent" android:layout_height="match_parent">
+
+        <ImageButton
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:id="@+id/homeButton"
+    android:src="@drawable/ic_home_24dp"
+    android:text="Home"
+    android:layout_centerVertical="true"
+    android:layout_alignParentStart="true" />
+
+        <ImageView
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:id="@+id/imageView"
+    android:layout_alignParentTop="true"
+    android:layout_alignParentStart="true"
+    android:layout_above="@+id/homeButton"
+    android:layout_alignParentEnd="true" />
+
+        <TextView
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:text="Set your phone to automatically adjust when you walk into the door"
+    android:id="@+id/txtview"
+    android:layout_toEndOf="@+id/homeButton"
+    android:layout_below="@+id/textHome" />
+
+        <TextView
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:textAppearance="?android:attr/textAppearanceMedium"
+    android:text="Home"
+    android:id="@+id/textHome"
+    android:layout_toEndOf="@+id/homeButton"
+    android:layout_below="@+id/imageView" />
+
+        <ImageButton
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:id="@+id/workButton"
+    android:src="@drawable/ic_work"
+    android:layout_below="@+id/homeButton"
+    android:layout_alignParentStart="true"
+    android:layout_marginTop="36dp" />
+
+        <TextView
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:textAppearance="?android:attr/textAppearanceMedium"
+    android:text="Work"
+    android:id="@+id/textView3"
+    android:layout_alignTop="@+id/workButton"
+    android:layout_toEndOf="@+id/workButton" />
+
+        <TextView
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:text="Keep your mind on the task at hand with Profiler during your Workday"
+    android:id="@+id/workTextView"
+    android:layout_below="@+id/textView3"
+    android:layout_toEndOf="@+id/workButton" />
+
+        <ImageButton
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:id="@+id/customButton"
+    android:src="@drawable/ic_custom"
+    android:layout_below="@+id/workButton"
+    android:layout_alignParentStart="true"
+    android:layout_marginTop="36dp" />
+
+        <TextView
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:textAppearance="?android:attr/textAppearanceMedium"
+    android:text="Custom"
+    android:id="@+id/textView5"
+    android:layout_alignTop="@+id/customButton"
+    android:layout_toEndOf="@+id/customButton" />
+
+        <TextView
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:text="Add important places so Profiler can help you when you&apos;re there"
+    android:id="@+id/customText"
+    android:layout_below="@+id/textView5"
+    android:layout_toEndOf="@+id/customButton" />
+
+
+    </RelativeLayout>
