@@ -1,12 +1,20 @@
 package com.example.ishwari.profiler;
 
-import android.location.Criteria;
+import android.app.Activity;
+import android.app.Dialog;
+import android.app.SearchManager;
+import android.content.Context;
 import android.location.Location;
-import android.location.LocationListener;
-import android.location.LocationManager;
+import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
-import android.support.v4.app.FragmentActivity;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.Menu;
+import android.view.View;
+import android.view.inputmethod.InputMethodManager;
+import android.widget.Button;
+import android.widget.SearchView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -19,50 +27,120 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
+import org.json.JSONArray;
+import org.json.JSONObject;
+
+import java.io.BufferedReader;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import java.util.HashMap;
+
+
 /**
  * Created by siddhartha on 9/30/15.
  */
 
-public class MapViewer extends FragmentActivity implements LocationListener{
+public class MapViewer extends AppCompatActivity{
 
     private GoogleMap mMap;
+    double latitude,longitude;
+
     Marker marker;
+    Button b1;
+    Location location;
+
+    HttpURLConnection urlConnection=null;
+    boolean canGetLocation = false;
+    //DBHelper dbHelper;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
+
         super.onCreate(savedInstanceState);
+        setContentView(R.layout.map_view);
+        b1=(Button)findViewById(R.id.setLocationButton);
+        String queryParam;
+
+        if(canGetLocationCheck()){
+            latitude=getLatitudeVal();
+            longitude=getLatitudeVal();
+            queryParam=Double.toString(latitude)+","+Double.toString(longitude);
+
+        }
+        else
+        {
+            queryParam="San+Francisco+State+University,1600+Holloway+Ave,+San+Francisco,+CA+94132";
+        }
 
         if (!isGooglePlayServicesAvailable()) {
             finish();
         }
 
-        setContentView(R.layout.map_view);
-        //setUpMapIfNeeded();
+        b1.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
 
-        SupportMapFragment supportMapFragment =
-                (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
-        mMap = supportMapFragment.getMap();
 
-        mMap.setMyLocationEnabled(true);
-        //mMap.getMyLocation();
+                // custom dialog
+                final Dialog dialog = new Dialog(MapViewer.this, R.style.AppTheme);
+               // dialog.setContentView(R.layout.save_location_dialog);
+                dialog.setTitle("Save Location");
+            }
+        });
 
-        LocationManager locationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
-        Criteria criteria = new Criteria();
-        String bestProvider = locationManager.getBestProvider(criteria, true);
-        Location location = locationManager.getLastKnownLocation(bestProvider);
-        if (location != null) {
-            onLocationChanged(location);
-        }
-        locationManager.requestLocationUpdates(bestProvider, 20000, 0, this);
+        setUpMapIfNeeded();
+        MapSearch mapSearch =new MapSearch();
+        mapSearch.execute(queryParam);
 
-        //CameraUpdate center = CameraUpdateFactory.newLatLng(new LatLng(37.721897, -122.47820939999997));
-        //CameraUpdate zoom = CameraUpdateFactory.zoomTo(15);
-
-        //mMap.moveCamera(center);
-        //mMap.animateCamera(zoom);
 
     }
+
+
+
     @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu
+        getMenuInflater().inflate(R.menu.map_menu, menu);
+        SearchManager searchManager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
+        SearchView searchView = (SearchView) menu.findItem(R.id.action_search).getActionView();
+
+        if (null != searchView) {
+            searchView.setSearchableInfo(searchManager
+                    .getSearchableInfo(getComponentName()));
+            searchView.setIconifiedByDefault(false);
+        }
+
+        SearchView.OnQueryTextListener queryTextListener = new SearchView.OnQueryTextListener() {
+            public boolean onQueryTextChange(String newText) {
+                // this is your adapter that will be filtered
+                Log.v("LISTENER","onQueryTextChange called - "+newText);
+                return true;
+            }
+
+            public boolean onQueryTextSubmit(String query) {
+                //Here u can get the value "query" which is entered in the search box.
+                //textview.setText(query);
+                //opensearch();
+                Log.v("LISTENER", "OnQuerySubmit called - " + query);
+                hideSoftKeyboard(MapViewer.this);
+                MapSearch mapSearch = new MapSearch();
+                mapSearch.execute(query);
+
+                return true;
+            }
+        };
+        searchView.setOnQueryTextListener(queryTextListener);
+        return true;
+    }
+    public static void hideSoftKeyboard(Activity activity) {
+        InputMethodManager inputMethodManager = (InputMethodManager)  activity.getSystemService(Activity.INPUT_METHOD_SERVICE);
+        inputMethodManager.hideSoftInputFromWindow(activity.getCurrentFocus().getWindowToken(), 0);
+    }
+
+
     public void onLocationChanged(Location location) {
         TextView locationTv = (TextView) findViewById(R.id.latlongLocation);
         double latitude = location.getLatitude();
@@ -76,7 +154,7 @@ public class MapViewer extends FragmentActivity implements LocationListener{
                 .title("You are here")
                 .snippet(String.valueOf(latLng))
                 .draggable(true));
-                //.icon(BitmapDescriptorFactory.fromResource(R.drawable.mark_start)));
+        //.icon(BitmapDescriptorFactory.fromResource(R.drawable.mark_start)));
         mMap.setOnMarkerDragListener(new GoogleMap.OnMarkerDragListener() {
 
             @Override
@@ -84,6 +162,9 @@ public class MapViewer extends FragmentActivity implements LocationListener{
                 // TODO Auto-generated method stub
                 Log.d("Marker", "Dragging");
             }
+
+
+
 
             @Override
             public void onMarkerDragEnd(Marker arg0) {
@@ -104,20 +185,73 @@ public class MapViewer extends FragmentActivity implements LocationListener{
         locationTv.setText("Latitude:" + latitude + ", Longitude:" + longitude);
     }
 
-    @Override
-    public void onProviderDisabled(String provider) {
-        // TODO Auto-generated method stub
+    public class MapSearch extends AsyncTask<String, Void, HashMap<String,String>> {
+
+
+        @Override
+        protected HashMap<String,String> doInBackground(String... params) {
+            HashMap<String,String> location = new HashMap<String,String>();
+            Log.v("LISTENER","doInBackground called - "+"");
+            String apiKey = "AIzaSyAUSETHO5_4d_lGrGfjX4vAowf6DrqaNmk";
+            try {
+                final String GOOGLE_BASE_URL = "https://maps.googleapis.com/maps/api/place/textsearch/json?";
+                final String QUERY_PARAM = "query";
+                final String APIKEY_PARAM = "key";
+
+                Uri builtUri = Uri.parse(GOOGLE_BASE_URL).buildUpon()
+                        .appendQueryParameter(QUERY_PARAM, params[0])
+                        .appendQueryParameter(APIKEY_PARAM, apiKey)
+                        .build();
+
+                URL url = new URL(builtUri.toString());
+                urlConnection = (HttpURLConnection) url.openConnection();
+                urlConnection.setRequestMethod("GET");
+                urlConnection.connect();
+
+
+                InputStream inputStream = urlConnection.getInputStream();
+                StringBuffer buffer = new StringBuffer();
+                BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream));
+
+                String line;
+                while ((line = reader.readLine()) != null) {
+
+                    buffer.append(line + "\n");
+                }
+
+                JSONObject jsonObject = new JSONObject(buffer.toString());
+                JSONArray resultsArr = jsonObject.getJSONArray("results");
+                location.put("addressStr", resultsArr.getJSONObject(0).getString("formatted_address"));
+                JSONObject locationObject = resultsArr.getJSONObject(0).getJSONObject("geometry").getJSONObject("location");
+
+                location.put("lat", locationObject.getString("lat"));
+                location.put("lng",locationObject.getString("lng"));
+                Log.v( "MAPS - LNG", locationObject.getString("lat"));
+                Log.v( "MAPS - LNG", locationObject.getString("lng"));
+                Log.v( "MAPS - LNG", resultsArr.getJSONObject(0).getString("formatted_address"));
+
+
+
+            } catch (Exception  e) {
+                Log.v("ERROR",e.toString());
+
+            }
+
+
+            return location;
+
+        }
+
+        protected void onPostExecute(HashMap<String,String> locationMap) {
+            String markerTitle = locationMap.get("addressStr");
+            double latitude = Double.parseDouble(locationMap.get("lat"));
+            double longitude = Double.parseDouble(locationMap.get("lng"));
+            marker.remove();
+            setUpMap(latitude,longitude, markerTitle);
+        }
     }
 
-    @Override
-    public void onProviderEnabled(String provider) {
-        // TODO Auto-generated method stub
-    }
 
-    @Override
-    public void onStatusChanged(String provider, int status, Bundle extras) {
-        // TODO Auto-generated method stub
-    }
 
     private boolean isGooglePlayServicesAvailable() {
         int status = GooglePlayServicesUtil.isGooglePlayServicesAvailable(this);
@@ -128,28 +262,47 @@ public class MapViewer extends FragmentActivity implements LocationListener{
             return false;
         }
     }
-    /*@Override
+
+    public double getLatitudeVal(){
+        if(location!=null){
+            latitude = location.getLatitude();
+        }
+        return latitude;
+    }
+
+    public double getLongitudeVal(){
+        if(location!=null){
+            longitude = location.getLongitude();
+        }
+        return longitude;
+    }
+
+    public boolean canGetLocationCheck(){
+        return this.canGetLocation;
+    }
+
+    @Override
     protected void onResume() {
         super.onResume();
         setUpMapIfNeeded();
     }
 
-    /**
-     * Sets up the map if it is possible to do so (i.e., the Google Play services APK is correctly
-     * installed) and the map has not already been instantiated.. This will ensure that we only ever
-     * call {@link #setUpMap()} once when {@link #mMap} is not null.
-     * <p/>
-     * If it isn't installed {@link SupportMapFragment} (and
-     * {@link com.google.android.gms.maps.MapView MapView}) will show a prompt for the user to
-     * install/update the Google Play services APK on their device.
-     * <p/>
-     * A user can return to this FragmentActivity after following the prompt and correctly
-     * installing/updating/enabling the Google Play services. Since the FragmentActivity may not
-     * have been completely destroyed during this process (it is likely that it would only be
-     * stopped or paused), {@link #onCreate(Bundle)} may not be called again so we should call this
-     * method in {@link #onResume()} to guarantee that it will be called.
-     */
-   /* private void setUpMapIfNeeded() {
+    /* /**
+      * Sets up the map if it is possible to do so (i.e., the Google Play services APK is correctly
+      * installed) and the map has not already been instantiated.. This will ensure that we only ever
+      * call {@link #setUpMap()} once when {@link #mMap} is not null.
+      * <p/>
+      * If it isn't installed {@link SupportMapFragment} (and
+      * {@link com.google.android.gms.maps.MapView MapView}) will show a prompt for the user to
+      * install/update the Google Play services APK on their device.
+      * <p/>
+      * A user can return to this FragmentActivity after following the prompt and correctly
+      * installing/updating/enabling the Google Play services. Since the FragmentActivity may not
+      * have been completely destroyed during this process (it is likely that it would only be
+      * stopped or paused), {@link #onCreate(Bundle)} may not be called again so we should call this
+      * method in {@link #onResume()} to guarantee that it will be called.
+      */
+    private void setUpMapIfNeeded() {
         // Do a null check to confirm that we have not already instantiated the map.
         if (mMap == null) {
             // Try to obtain the map from the SupportMapFragment.
@@ -157,7 +310,7 @@ public class MapViewer extends FragmentActivity implements LocationListener{
                     .getMap();
             // Check if we were successful in obtaining the map.
             if (mMap != null) {
-                setUpMap();
+                setUpMap(latitude,longitude,"Current Location");
             }
         }
     }
@@ -168,19 +321,14 @@ public class MapViewer extends FragmentActivity implements LocationListener{
      * <p/>
      * This should only be called once and when we are sure that {@link #mMap} is not null.
      */
-   /* private void setUpMap() {
-        mMap.addMarker(new MarkerOptions().position(new LatLng(37.721897, -122.47820939999997))
-                .title("You are here")
-                .flat(true).draggable(true));
-
-
-    }*/
-
+    private void setUpMap(double latitude, double longitude, String titleStr) {
+        TextView locationTv = (TextView) findViewById(R.id.latlongLocation);
+        marker = mMap.addMarker(new MarkerOptions().position(new LatLng(latitude, longitude)).title(titleStr));
+        marker.showInfoWindow();
+        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(latitude, longitude), 16.9f));
+        locationTv.setText(titleStr);
 
     }
 
 
-
-
-
-
+}
