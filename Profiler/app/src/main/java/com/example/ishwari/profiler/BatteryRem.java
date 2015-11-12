@@ -1,25 +1,16 @@
 package com.example.ishwari.profiler;
 
 import android.app.Activity;
-import android.app.AlertDialog;
 import android.app.Dialog;
-import android.content.Context;
-import android.content.Intent;
 import android.os.Bundle;
-import android.view.Gravity;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.GridView;
-import android.widget.ImageView;
+import android.widget.PopupWindow;
 import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.Toast;
-import android.widget.PopupWindow;
-
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Created by siddhartha on 9/30/15.
@@ -58,11 +49,87 @@ public class BatteryRem extends Activity {
 
                 GridView gridView = (GridView) dialog.findViewById(R.id.gridView);
 
+               /* View imageView = null;
+                */
+
                 gridView.setAdapter(new GridViewAdapter(getApplication()));
                 gridView.setNumColumns(4);
                 gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                     @Override
                     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+
+
+
+
+                        switch (position)
+                        {
+                            case 0:
+                                Toast.makeText(BatteryRem.this, "Wi-Fi On" ,
+                                        Toast.LENGTH_SHORT).show();
+                                break;
+                            case 1:
+                                Toast.makeText(BatteryRem.this, "Wi-Fi Off" ,
+                                        Toast.LENGTH_SHORT).show();
+                                break;
+                            case 2:
+                                Toast.makeText(BatteryRem.this, "High Brightness" ,
+                                        Toast.LENGTH_SHORT).show();
+                                break;
+                            case 3:
+                                Toast.makeText(BatteryRem.this, "Medium Brightness" ,
+                                        Toast.LENGTH_SHORT).show();
+                                break;
+                            case 4:
+                                Toast.makeText(BatteryRem.this, "Low Brightness" ,
+                                        Toast.LENGTH_SHORT).show();
+                                break;
+                            case 5:
+                                Toast.makeText(BatteryRem.this, "Airplane Mode Off " ,
+                                        Toast.LENGTH_SHORT).show();
+                                break;
+                            case 6:
+                                Toast.makeText(BatteryRem.this, "Airplane Mode On" ,
+                                        Toast.LENGTH_SHORT).show();
+                                break;
+                            case 7:
+                                Toast.makeText(BatteryRem.this, "Bluetooth On" ,
+                                        Toast.LENGTH_SHORT).show();
+                                break;
+                            case 8:
+                                Toast.makeText(BatteryRem.this, "Bluetooth Off" ,
+                                        Toast.LENGTH_SHORT).show();
+                                break;
+                            case 9:
+                                Toast.makeText(BatteryRem.this, "Vibrate" ,
+                                        Toast.LENGTH_SHORT).show();
+                                break;
+                            case 10:
+                                Toast.makeText(BatteryRem.this, "Silent" ,
+                                        Toast.LENGTH_SHORT).show();
+                                break;
+                            case 11:
+                                Toast.makeText(BatteryRem.this, "Loud" ,
+                                        Toast.LENGTH_SHORT).show();
+                                break;
+                            case 12:
+                                Toast.makeText(BatteryRem.this, "Auto-rotate" ,
+                                        Toast.LENGTH_SHORT).show();
+                                break;
+                            case 13:
+                                Toast.makeText(BatteryRem.this, "Lock Auto-rotate" ,
+                                        Toast.LENGTH_SHORT).show();
+                                break;
+                            case 14:
+                                Toast.makeText(BatteryRem.this, "Mobile Data On" ,
+                                        Toast.LENGTH_SHORT).show();
+                                break;
+
+                            default:
+                                    Toast.makeText(BatteryRem.this, "Wrong Input" ,
+                                            Toast.LENGTH_SHORT).show();
+                                break;
+                        }
+
 
                     }
                 });

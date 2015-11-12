@@ -12,6 +12,8 @@ import android.widget.ImageView;
  */
 public class GridViewAdapter extends BaseAdapter {
 
+    //String [] toasts = {"Wifi On", "Wifi Off", "High brightness","Medium brightness", "Low brightness", "Airplane mode off", "Airplane mode on", "Bluetooth on", "Bluetooth off",
+    //""};
 
     private Context mContext;
 
@@ -49,9 +51,6 @@ public class GridViewAdapter extends BaseAdapter {
         return imageView;
 
 
-
-
-
     }
 
 
@@ -69,13 +68,10 @@ public class GridViewAdapter extends BaseAdapter {
             R.drawable.ic_volume_off_24dp,
             R.drawable.ic_volume_up_24dp,
             R.drawable.ic_screen_rotation_24dp,
-            R.drawable.ic_screen_lock_rotation_24dp
-
-
-
-
-
-
+            R.drawable.ic_screen_lock_rotation_24dp,
+            R.drawable.ic_swap_vert_24dp
 
     };
+
+
 }
