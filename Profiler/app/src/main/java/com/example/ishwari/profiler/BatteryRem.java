@@ -2,11 +2,15 @@ package com.example.ishwari.profiler;
 
 import android.app.Activity;
 import android.app.Dialog;
+import android.content.Context;
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.GridView;
+import android.widget.ImageView;
 import android.widget.PopupWindow;
 import android.widget.SeekBar;
 import android.widget.TextView;
@@ -57,13 +61,13 @@ public class BatteryRem extends Activity {
                 gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                     @Override
                     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                       // ImageView imageView = (ImageView) imgView;
+                        //imageView.setImageResource(R.drawable.ic);
 
 
-
-
-                        switch (position)
-                        {
+                        switch (position) {
                             case 0:
+//                                gridView.setImageResource(R.drawable.ic_signal_wifi_off_24dp);
                                 Toast.makeText(BatteryRem.this, "Wi-Fi On" ,
                                         Toast.LENGTH_SHORT).show();
                                 break;
@@ -142,36 +146,36 @@ public class BatteryRem extends Activity {
                     }
                 });
 
-              //
+                //
             }
         });
 
 
-    sb.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener()
+        sb.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener()
 
-                                  {
+                                      {
 
-                                      int progress = 0;
-
-
-                                      @Override
-
-                                      public void onProgressChanged(SeekBar seekBar, int progresValue, boolean fromUser) {
-
-                                          progress = progresValue;
+                                          int progress = 0;
 
 
-                                      }
+                                          @Override
 
-                                      @Override
+                                          public void onProgressChanged(SeekBar seekBar, int progresValue, boolean fromUser) {
 
-                                      public void onStartTrackingTouch(SeekBar seekBar) {
+                                              progress = progresValue;
 
 
-                                      }
+                                          }
 
-                                      @Override
-                                      public void onStopTrackingTouch(SeekBar seekBar) {
+                                          @Override
+
+                                          public void onStartTrackingTouch(SeekBar seekBar) {
+
+
+                                          }
+
+                                          @Override
+                                          public void onStopTrackingTouch(SeekBar seekBar) {
                                           textView.setText("Selected: " + progress + "%");
 
 
