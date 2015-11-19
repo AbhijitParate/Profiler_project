@@ -4,4 +4,6 @@
     android:layout_height="match_parent"
     android:background="@drawable/app_logo">
 
+
+
 </LinearLayout>
