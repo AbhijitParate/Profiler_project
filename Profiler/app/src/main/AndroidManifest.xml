@@ -76,6 +76,16 @@
         </activity>
 
         <activity
+            android:name=".SelectLocation"
+            android:label="@string/select_location">
+            <intent-filter>
+                <action android:name="android.intent.action.MAINACTIVITY" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+
+        <activity
         android:name=".MapViewer"
         android:label="@string/title_MapViewer"
             android:theme="@style/Base.Theme.AppCompat">
