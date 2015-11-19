@@ -1,9 +1,9 @@
 package com.example.ishwari.profiler;
 
 import android.app.Activity;
-import android.app.Dialog;
 import android.app.SearchManager;
 import android.content.Context;
+import android.content.Intent;
 import android.location.Location;
 import android.net.Uri;
 import android.os.AsyncTask;
@@ -53,7 +53,7 @@ public class MapViewer extends AppCompatActivity{
 
     HttpURLConnection urlConnection=null;
     boolean canGetLocation = false;
-    //DBHelper dbHelper;
+    DBHelper dbHelper;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -66,7 +66,7 @@ public class MapViewer extends AppCompatActivity{
 
         if(canGetLocationCheck()){
             latitude=getLatitudeVal();
-            longitude=getLatitudeVal();
+            longitude=-getLongitudeVal();
             queryParam=Double.toString(latitude)+","+Double.toString(longitude);
 
         }
@@ -83,11 +83,9 @@ public class MapViewer extends AppCompatActivity{
             @Override
             public void onClick(View v) {
 
+                Intent intent = new Intent(MapViewer.this, SelectLocation.class);
+                startActivity(intent);
 
-                // custom dialog
-                final Dialog dialog = new Dialog(MapViewer.this, R.style.AppTheme);
-               // dialog.setContentView(R.layout.save_location_dialog);
-                dialog.setTitle("Save Location");
             }
         });
 
@@ -182,7 +180,7 @@ public class MapViewer extends AppCompatActivity{
 
             }
         });
-        locationTv.setText("Latitude:" + latitude + ", Longitude:" + longitude);
+       // locationTv.setText("Latitude:" + latitude + ", Longitude:" + longitude);
     }
 
     public class MapSearch extends AsyncTask<String, Void, HashMap<String,String>> {
@@ -225,7 +223,7 @@ public class MapViewer extends AppCompatActivity{
                 JSONObject locationObject = resultsArr.getJSONObject(0).getJSONObject("geometry").getJSONObject("location");
 
                 location.put("lat", locationObject.getString("lat"));
-                location.put("lng",locationObject.getString("lng"));
+              location.put("lng",locationObject.getString("lng"));
                 Log.v( "MAPS - LNG", locationObject.getString("lat"));
                 Log.v( "MAPS - LNG", locationObject.getString("lng"));
                 Log.v( "MAPS - LNG", resultsArr.getJSONObject(0).getString("formatted_address"));
