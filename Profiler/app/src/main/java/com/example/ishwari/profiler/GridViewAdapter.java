@@ -1,10 +1,14 @@
 package com.example.ishwari.profiler;
 
+import android.bluetooth.BluetoothAdapter;
+import android.bluetooth.BluetoothManager;
 import android.content.Context;
 import android.graphics.drawable.Drawable;
+import android.net.wifi.WifiManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.BaseAdapter;
 import android.widget.GridView;
 import android.widget.ImageButton;
@@ -65,23 +69,40 @@ public class GridViewAdapter extends BaseAdapter {
 
 //        final ImageButton imageButtonOn = (ImageButton) convertView.findViewById(R.id.imageView_grid_off);
 //        ImageButton imageButtonOff = (ImageButton) convertView.findViewById(R.id.imageView_grid_off);
-        ToggleButton toggleButton = (ToggleButton) convertView.findViewById(R.id.toggle_button);
+        final ToggleButton toggleButton = (ToggleButton) convertView.findViewById(R.id.toggle_button);
         toggleButton.setLayoutParams(new GridView.LayoutParams(200, 200));
         toggleButton.setPadding(8, 8, 8, 8);
-        toggleButton.setText("Wifi");
+//        toggleButton.setText("Wifi");
         toggleButton.setBackgroundResource(mThumbIdOn[position]);
 //        boolean clicked = true;
 //        imageButtonOn.setImageResource(mThumbIdOff[position]);
         toggleButton.setOnClickListener(new View.OnClickListener() {
+            boolean enable = false;
 
             @Override
             public void onClick(View v) {
-                /*
-                if (wifi on)
-                    wifi off
-                else
-                    wifi on
-                 */
+                switch (position) {
+                    case 0:
+                        WifiManager wifi = (WifiManager) mContext.getSystemService(Context.WIFI_SERVICE);
+                        wifi.setWifiEnabled(true);
+                        break;
+                    case 3:
+
+                            final BluetoothAdapter bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
+                            bluetoothAdapter.enable();
+                            toggleButton.setBackgroundResource(mThumbIdOff[3]);
+
+                            toggleButton.setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View v) {
+                                    toggleButton.setBackgroundResource(mThumbIdOn[3]);
+                                    bluetoothAdapter.disable();
+                                }
+                            });
+                            break;
+
+
+                }
             }
         });
         return toggleButton;
@@ -94,7 +115,7 @@ public class GridViewAdapter extends BaseAdapter {
             R.drawable.ic_signal_wifi_4_bar_24dp,
             R.drawable.ic_brightness_high_24dp,
             R.drawable.ic_airplanemode_off_24dp,
-            R.drawable.ic_bluetooth_24dp,
+            R.drawable.ic_bluetooth_disabled_24dp,
             R.drawable.ic_volume_off_24dp,
             R.drawable.ic_screen_lock_rotation_24dp,
             R.drawable.ic_vibration_24dp,
@@ -105,7 +126,7 @@ public class GridViewAdapter extends BaseAdapter {
             R.drawable.ic_brightness_medium_24dp,
 //            R.drawable.ic_brightness_low_24dp,
             R.drawable.ic_airplanemode_on,
-            R.drawable.ic_bluetooth_disabled_24dp,
+            R.drawable.ic_bluetooth_24dp,
             R.drawable.ic_volume_up_24dp,
             R.drawable.ic_screen_rotation_24dp,
             R.drawable.ic_swap_vert_24dp

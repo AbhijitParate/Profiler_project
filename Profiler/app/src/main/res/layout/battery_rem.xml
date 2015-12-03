@@ -32,5 +32,14 @@
         android:layout_centerHorizontal="true"
         android:layout_marginBottom="71dp" />
 
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Activate"
+        android:id="@+id/low_battery"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:onClick="scheduleAlarmBattery"/>
+
 
 </RelativeLayout>

@@ -1,10 +1,15 @@
 package com.example.ishwari.profiler;
 
 import android.app.Activity;
+import android.app.AlarmManager;
 import android.app.Dialog;
+import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
+import android.content.SharedPreferences;
 import android.net.Uri;
+import android.os.BatteryManager;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
@@ -16,6 +21,8 @@ import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.util.GregorianCalendar;
+
 /**
  * Created by siddhartha on 9/30/15.
  */
@@ -26,16 +33,28 @@ public class BatteryRem extends Activity {
     private PopupWindow popup;
     private Button button;
     GridViewAdapter gview;
+    Context context;
+    int progress = 0;
+    private SharedPreferences mValuePrefs;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
 
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.battery_rem);
 
+
+        super.onCreate(savedInstanceState);
+        AlarmReceiverTest mBatteryLevelReceiver = new AlarmReceiverTest();
+        registerReceiver(mBatteryLevelReceiver, new IntentFilter(
+                Intent.ACTION_BATTERY_CHANGED));
+
+
         sb = (SeekBar) findViewById(R.id.seekBar);
         textView = (TextView) findViewById(R.id.textView1);
+        mValuePrefs = getSharedPreferences("prefs", MODE_PRIVATE);
 
 
         textView.setText("Selected: " + sb.getProgress() + "%");
@@ -61,79 +80,6 @@ public class BatteryRem extends Activity {
                 gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                     @Override
                     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                       // ImageView imageView = (ImageView) imgView;
-                        //imageView.setImageResource(R.drawable.ic);
-
-
-                        switch (position) {
-                            case 0:
-//                                gridView.setImageResource(R.drawable.ic_signal_wifi_off_24dp);
-                                Toast.makeText(BatteryRem.this, "Wi-Fi On" ,
-                                        Toast.LENGTH_SHORT).show();
-                                break;
-                            case 1:
-                                Toast.makeText(BatteryRem.this, "Wi-Fi Off" ,
-                                        Toast.LENGTH_SHORT).show();
-                                break;
-                            case 2:
-                                Toast.makeText(BatteryRem.this, "High Brightness" ,
-                                        Toast.LENGTH_SHORT).show();
-                                break;
-                            case 3:
-                                Toast.makeText(BatteryRem.this, "Medium Brightness" ,
-                                        Toast.LENGTH_SHORT).show();
-                                break;
-                            case 4:
-                                Toast.makeText(BatteryRem.this, "Low Brightness" ,
-                                        Toast.LENGTH_SHORT).show();
-                                break;
-                            case 5:
-                                Toast.makeText(BatteryRem.this, "Airplane Mode Off " ,
-                                        Toast.LENGTH_SHORT).show();
-                                break;
-                            case 6:
-                                Toast.makeText(BatteryRem.this, "Airplane Mode On" ,
-                                        Toast.LENGTH_SHORT).show();
-                                break;
-                            case 7:
-                                Toast.makeText(BatteryRem.this, "Bluetooth On" ,
-                                        Toast.LENGTH_SHORT).show();
-                                break;
-                            case 8:
-                                Toast.makeText(BatteryRem.this, "Bluetooth Off" ,
-                                        Toast.LENGTH_SHORT).show();
-                                break;
-                            case 9:
-                                Toast.makeText(BatteryRem.this, "Vibrate" ,
-                                        Toast.LENGTH_SHORT).show();
-                                break;
-                            case 10:
-                                Toast.makeText(BatteryRem.this, "Silent" ,
-                                        Toast.LENGTH_SHORT).show();
-                                break;
-                            case 11:
-                                Toast.makeText(BatteryRem.this, "Loud" ,
-                                        Toast.LENGTH_SHORT).show();
-                                break;
-                            case 12:
-                                Toast.makeText(BatteryRem.this, "Auto-rotate" ,
-                                        Toast.LENGTH_SHORT).show();
-                                break;
-                            case 13:
-                                Toast.makeText(BatteryRem.this, "Lock Auto-rotate" ,
-                                        Toast.LENGTH_SHORT).show();
-                                break;
-                            case 14:
-                                Toast.makeText(BatteryRem.this, "Mobile Data On" ,
-                                        Toast.LENGTH_SHORT).show();
-                                break;
-
-                            default:
-                                    Toast.makeText(BatteryRem.this, "Wrong Input" ,
-                                            Toast.LENGTH_SHORT).show();
-                                break;
-                        }
-
 
                     }
                 });
@@ -151,11 +97,12 @@ public class BatteryRem extends Activity {
         });
 
 
+
         sb.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener()
 
                                       {
 
-                                          int progress = 0;
+
 
 
                                           @Override
@@ -177,6 +124,11 @@ public class BatteryRem extends Activity {
                                           @Override
                                           public void onStopTrackingTouch(SeekBar seekBar) {
                                           textView.setText("Selected: " + progress + "%");
+                                              progress = seekBar.getProgress();
+                                              //Save value in shared prefs
+                                              SharedPreferences.Editor editor = mValuePrefs.edit();
+                                              editor.putInt("seekbar", progress);
+                                              editor.commit();
 
 
                                       }
@@ -186,5 +138,20 @@ public class BatteryRem extends Activity {
     );
 
 }
+
+//    public void scheduleAlarmBattery(View V)
+//    {
+//
+//
+//
+//        // create the object
+//        AlarmManager alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
+//        Intent intentAlarm = new Intent(this, AlarmReceiverTest.class);
+//        //set the alarm for particular time
+//        alarmManager.set(AlarmManager.RTC_WAKEUP, progress, PendingIntent.getBroadcast(this, 1, intentAlarm, PendingIntent.FLAG_UPDATE_CURRENT));
+//        Toast.makeText(BatteryRem.this, "Settings will be activated in a minute", Toast.LENGTH_LONG).show();
+//
+//    }
+
 
     }
