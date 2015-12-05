@@ -11,6 +11,7 @@ import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.BatteryManager;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
@@ -54,7 +55,7 @@ public class BatteryRem extends Activity {
 
         sb = (SeekBar) findViewById(R.id.seekBar);
         textView = (TextView) findViewById(R.id.textView1);
-        mValuePrefs = getSharedPreferences("prefs", MODE_PRIVATE);
+        mValuePrefs = getSharedPreferences("prefs", Context.MODE_PRIVATE);
 
 
         textView.setText("Selected: " + sb.getProgress() + "%");
@@ -126,9 +127,14 @@ public class BatteryRem extends Activity {
                                           textView.setText("Selected: " + progress + "%");
                                               progress = seekBar.getProgress();
                                               //Save value in shared prefs
+//                                              mValuePrefs=context.getSharedPreferences()
+
                                               SharedPreferences.Editor editor = mValuePrefs.edit();
+                                              editor.clear();
                                               editor.putInt("seekbar", progress);
+                                              Log.d("SeekBAR: ",Integer.toString(progress));
                                               editor.commit();
+
 
 
                                       }
@@ -139,19 +145,19 @@ public class BatteryRem extends Activity {
 
 }
 
-//    public void scheduleAlarmBattery(View V)
-//    {
-//
-//
-//
-//        // create the object
-//        AlarmManager alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
-//        Intent intentAlarm = new Intent(this, AlarmReceiverTest.class);
-//        //set the alarm for particular time
-//        alarmManager.set(AlarmManager.RTC_WAKEUP, progress, PendingIntent.getBroadcast(this, 1, intentAlarm, PendingIntent.FLAG_UPDATE_CURRENT));
-//        Toast.makeText(BatteryRem.this, "Settings will be activated in a minute", Toast.LENGTH_LONG).show();
-//
-//    }
+    public void scheduleAlarmBattery(View V)
+    {
+
+
+
+        // create the object
+        AlarmManager alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
+        Intent intentAlarm = new Intent(this, AlarmReceiverTest.class);
+        //set the alarm for particular time
+        alarmManager.set(AlarmManager.RTC_WAKEUP, progress, PendingIntent.getBroadcast(this, 1, intentAlarm, PendingIntent.FLAG_UPDATE_CURRENT));
+        Toast.makeText(BatteryRem.this, "Settings will be activated in a minute", Toast.LENGTH_LONG).show();
+
+    }
 
 
     }

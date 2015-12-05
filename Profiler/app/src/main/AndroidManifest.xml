@@ -2,46 +2,46 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.ishwari.profiler" >
 
+    <uses-sdk android:minSdkVersion="11" />
+
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
-    <!--<uses-permission android:name="android.permission.UPDATE_DEVICE_STATS" />-->
+    <!-- <uses-permission android:name="android.permission.UPDATE_DEVICE_STATS" /> -->
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
     <uses-permission android:name="android.permission.CHANGE_WIFI_STATE" />
-    <uses-permission android:name="android.permission.BLUETOOTH"/>
-    <uses-permission android:name="android.permission.BLUETOOTH_ADMIN"/>
-    <uses-permission android:name="android.permission.WRITE_SETTINGS" ></uses-permission>
-    <uses-permission android:name="android.permission.CHANGE_CONFIGURATION" ></uses-permission>
-    <uses-permission android:name="android.permission.MODIFY_AUDIO_SETTINGS" ></uses-permission>
-    <uses-permission android:name="android.permission.BATTERY_STATS"/>
+    <uses-permission android:name="android.permission.BLUETOOTH" />
+    <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" />
+    <uses-permission android:name="android.permission.WRITE_SETTINGS" />
+    <uses-permission android:name="android.permission.CHANGE_CONFIGURATION" />
+    <uses-permission android:name="android.permission.MODIFY_AUDIO_SETTINGS" />
+    <uses-permission android:name="android.permission.BATTERY_STATS" />
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
-    <uses-permission android:name="android.permission.WRITE_SETTINGS"></uses-permission>
+    <uses-permission android:name="android.permission.WRITE_SETTINGS" />
 
     <uses-feature
         android:glEsVersion="0x00020000"
         android:required="true" />
 
-    <uses-sdk android:minSdkVersion="11"/>
+    <android:uses-permission android:name="android.permission.READ_PHONE_STATE" />
+    <android:uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
 
     <application
         android:allowBackup="true"
         android:icon="@mipmap/applogo2"
         android:label="@string/app_name"
-        android:theme="@style/AppTheme">
-
-
+        android:theme="@style/AppTheme" >
         <activity
             android:name=".SplashScreen"
-            android:label="Profiler">
+            android:label="Profiler" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
         <activity
             android:name=".MainActivity"
             android:label="@string/app_name" >
@@ -58,78 +58,79 @@
             </intent-filter>
         </receiver>
 
-
-
         <activity
             android:name=".TimeOfDay"
-            android:label="@string/time_of_day">
+            android:label="@string/time_of_day" >
             <intent-filter>
                 <action android:name="android.intent.action.MAINACTIVITY" />
 
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
-
-
         <activity
             android:name=".BatteryRem"
-            android:label="@string/battery_rem">
+            android:label="@string/battery_rem" >
             <intent-filter>
                 <action android:name="android.intent.action.MAINACTIVITY" />
 
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
-
         <activity
             android:name=".AddLocation"
-            android:label="@string/add_location">
+            android:label="@string/add_location" >
             <intent-filter>
                 <action android:name="android.intent.action.MAINACTIVITY" />
 
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
-
         <activity
             android:name=".SelectLocation"
-            android:label="@string/select_location">
+            android:label="@string/select_location" >
             <intent-filter>
                 <action android:name="android.intent.action.MAINACTIVITY" />
 
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
-
         <activity
-        android:name=".MapViewer"
-        android:label="@string/title_MapViewer"
-            android:theme="@style/Base.Theme.AppCompat">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-            <intent-filter>
-                <action android:name="android.intent.action.SEARCH" />
-            </intent-filter>
-
-            <meta-data android:name="android.app.default_searchable"
-        android:value=".MapsActivity" />
-
-            <!-- Points to searchable meta data -->
-            <meta-data android:name="android.app.searchable"
-        android:resource="@xml/searchable"/>
-    </activity>
-
-        <receiver android:name=".AlarmReceiverTest">
+            android:name=".MapViewer"
+            android:label="@string/title_MapViewer"
+            android:theme="@style/Base.Theme.AppCompat" >
+            
             <intent-filter>
-                <action android:name="android.intent.action.BATTERY_CHANGED"/>
+                
+                <action android:name="android.intent.action.MAIN" />
+                
+                <category android:name="android.intent.category.LAUNCHER" />
+            
+            </intent-filter>
+            
+            <intent-filter>
+                
+                <action android:name="android.intent.action.SEARCH" />
+            
+            </intent-filter>
+            
+            <meta-data
+                android:name="android.app.default_searchable"
+                android:value=".MapsActivity" />
+            
+            <!-- Points to searchable meta data -->
+            
+            <meta-data
+                android:name="android.app.searchable"
+                android:resource="@xml/searchable" />
+        </activity>
+
+        <receiver android:name=".AlarmReceiverTest" >
+            <intent-filter>
+                <action android:name="android.intent.action.BATTERY_CHANGED" />
                 <action android:name="android.intent.action.ACTION_POWER_CONNECTED" />
                 <action android:name="android.intent.action.ACTION_POWER_DISCONNECTED" />
                 <action android:name="android.intent.action.BATTERY_LOW" />
                 <action android:name="android.intent.action.BATTERY_OKAY" />
-
             </intent-filter>
         </receiver>
 
@@ -140,7 +141,11 @@
             android:name="com.google.android.maps.v2.API_KEY"
             android:value="AIzaSyBxEFcN44rPbut5nZgiyaiKMmKcAzxfwX0" />
 
-
+        <service
+            android:name=".MyService"
+            android:enabled="true"
+            android:exported="true" >
+        </service>
     </application>
 
 </manifest>
