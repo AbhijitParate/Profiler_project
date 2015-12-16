@@ -46,6 +46,7 @@ public class MapViewer extends AppCompatActivity{
 
     private GoogleMap mMap;
     double latitude,longitude;
+    String profile;
 
     Marker marker;
     Button b1;
@@ -63,6 +64,9 @@ public class MapViewer extends AppCompatActivity{
         setContentView(R.layout.map_view);
         b1=(Button)findViewById(R.id.setLocationButton);
         String queryParam;
+
+        Intent receivedIntent = getIntent();
+        profile =  receivedIntent.getStringExtra("Profile");
 
         if(canGetLocationCheck()){
             latitude=getLatitudeVal();
@@ -84,6 +88,16 @@ public class MapViewer extends AppCompatActivity{
             public void onClick(View v) {
 
                 Intent intent = new Intent(MapViewer.this, SelectLocation.class);
+                intent.putExtra("Lat", Double.toString(latitude) );
+                intent.putExtra("Lan", Double.toString( longitude ) );
+                intent.putExtra("Addr", marker.getTitle());
+                intent.putExtra("Profile", profile);
+
+                Log.d("OnClick Lat : ", Double.toString(latitude));
+                Log.d("OnClick Lan : ", Double.toString( longitude ));
+
+
+
                 startActivity(intent);
 
             }
@@ -223,7 +237,11 @@ public class MapViewer extends AppCompatActivity{
                 JSONObject locationObject = resultsArr.getJSONObject(0).getJSONObject("geometry").getJSONObject("location");
 
                 location.put("lat", locationObject.getString("lat"));
-              location.put("lng",locationObject.getString("lng"));
+                location.put("lng",locationObject.getString("lng"));
+
+                latitude = locationObject.getDouble("lat");
+                longitude = locationObject.getDouble("lng");
+
                 Log.v( "MAPS - LNG", locationObject.getString("lat"));
                 Log.v( "MAPS - LNG", locationObject.getString("lng"));
                 Log.v( "MAPS - LNG", resultsArr.getJSONObject(0).getString("formatted_address"));

@@ -41,6 +41,7 @@ public class AddLocation extends Activity {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(AddLocation.this, MapViewer.class);
+                intent.putExtra("Profile", "Home");
                 startActivity(intent);
                 Toast toast = Toast.makeText(getApplicationContext(), "Select Home Location", Toast.LENGTH_SHORT);
                 toast.show();
@@ -50,6 +51,7 @@ public class AddLocation extends Activity {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(AddLocation.this, MapViewer.class);
+                intent.putExtra("Profile", "Work");
                 startActivity(intent);
                 Toast toast = Toast.makeText(getApplicationContext(), "Select Work Place", Toast.LENGTH_SHORT);
                 toast.show();
@@ -59,6 +61,7 @@ public class AddLocation extends Activity {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(AddLocation.this, MapViewer.class);
+                intent.putExtra("Profile", "Custom");
                 startActivity(intent);
                 Toast toast = Toast.makeText(getApplicationContext(), "Select Custom Place", Toast.LENGTH_SHORT);
                 toast.show();

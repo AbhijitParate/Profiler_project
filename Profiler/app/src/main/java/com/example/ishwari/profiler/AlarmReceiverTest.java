@@ -9,6 +9,7 @@ import android.media.AudioManager;
 import android.net.wifi.WifiManager;
 import android.os.BatteryManager;
 import android.provider.Settings;
+import android.util.Log;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Toast;
@@ -42,9 +43,10 @@ public class AlarmReceiverTest extends BroadcastReceiver {
         float batteryPercentage = ((float) batteryLevel / (float) maxLevel) * 100;
         audio = (AudioManager)mContext.getSystemService(Context.AUDIO_SERVICE);
 //        window= BatteryRem.getWindow();
-        mPrefs = context.getSharedPreferences("prefs", context.MODE_PRIVATE);
+        mPrefs = context.getSharedPreferences("prefs", Context.MODE_PRIVATE);
 
-        int seekbar = mPrefs.getInt("seekbar", 70);
+        int seekbar = mPrefs.getInt("seekbar", 0);
+        Log.d("seekbar:",Integer.toString(seekbar));
 
         if(batteryPercentage<=seekbar){
 

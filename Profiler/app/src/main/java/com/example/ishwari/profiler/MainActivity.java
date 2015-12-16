@@ -27,6 +27,7 @@ public class MainActivity extends Activity {
     private RecyclerView.Adapter adapter;
     private ImageButton fab;
 
+
     private boolean expanded = false;
 
     private View fabaction1;
@@ -44,6 +45,8 @@ public class MainActivity extends Activity {
         itemList = new ArrayList<>();
         nextItemNumber = 0;
 
+
+        startService(new Intent(this,MyService.class));
 
 
         setContentView(R.layout.activity_main);
@@ -113,7 +116,7 @@ public class MainActivity extends Activity {
             }
         });}
 
-       // RecyclerView recyclerView = (RecyclerView) findViewById(R.id.recycler_view);
+        RecyclerView recyclerView = (RecyclerView) findViewById(R.id.recycler_view);
 
         /**
          * If it is known in advance that the physical size of all the items in
