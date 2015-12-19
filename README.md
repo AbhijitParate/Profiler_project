@@ -9,5 +9,5 @@ The Journal is in the Wiki section of this repository.
 
 ##Collaborators
 
-*Siddhartha Sankasala
-*Ishwari Shevade
+* Siddhartha Sankasala
+* Ishwari Shevade
