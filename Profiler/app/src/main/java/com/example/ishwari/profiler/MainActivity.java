@@ -3,29 +3,40 @@ package com.example.ishwari.profiler;
 import android.animation.Animator;
 import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.graphics.drawable.Animatable;
 import android.graphics.drawable.Drawable;
 import android.app.Activity;
 import android.os.Bundle;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.View;
 import android.content.Intent;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
 import android.widget.ImageButton;
+import android.widget.ListView;
 import android.widget.Toast;
 
-import java.util.ArrayList;
+
+import com.google.android.gms.maps.model.LatLng;
+
+
 import java.util.List;
 
 
 
 public class MainActivity extends Activity {
 
-    private List<String>         itemList;
-    private int                  nextItemNumber;
+    private List<String> itemList;
+    private int nextItemNumber;
     private RecyclerView.Adapter adapter;
     private ImageButton fab;
+
+    private static final String TAG = "CardListActivity";
+    private CardArrayAdapter cardArrayAdapter;
+    private ListView listView;
 
 
     private boolean expanded = false;
@@ -38,162 +49,220 @@ public class MainActivity extends Activity {
     private float offset2;
     private float offset3;
 
+    public SharedPreferences shPrefs;
+
+    String homeProf,homeAddr;
+    String workProf,workAddr,timeProf;
+    String customProf,customAddr;
+    Float latt,longg;
+    Integer batteryLev;
+    Double homeLat, homeLng;
+
+
+    private GeoFencing geoFencing;
+
+
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        //geoFencing.stop();
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        geoFencing.start();
+        startService(new Intent(this, MyService.class));
+
+
+
+
+    }
+
+    @Override
+    protected void onResume(){
+        super.onResume();
+
+        //Initialize geofences on resume
+        geoFencing.start();
+
+        cardArrayAdapter.removeAllCards();
+
+        Card card = new Card(homeProf,homeAddr);
+        Card card1=new Card(workProf,workAddr);
+        Card card2=new Card(customProf,customAddr);
+        Card card3=new Card("Battery",Integer.toString(batteryLev));
+        Card card4=new Card("Time ",timeProf);
+
+        cardArrayAdapter.add(card);
+        cardArrayAdapter.add(card1);
+        cardArrayAdapter.add(card2);
+        cardArrayAdapter.add(card3);
+        cardArrayAdapter.add(card4);
+
+
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        itemList = new ArrayList<>();
-        nextItemNumber = 0;
-
-
-        startService(new Intent(this,MyService.class));
-
-
         setContentView(R.layout.activity_main);
+
+        buildFab();
+
+        initializeGeoFencing();
+        addFencesFromSharedPref();
+
+        listView = (ListView) findViewById(R.id.card_listView);
+
+        listView.addHeaderView(new View(this));
+        listView.addFooterView(new View(this));
+
+        cardArrayAdapter = new CardArrayAdapter(getApplicationContext(), R.layout.list_item_card);
+
+
+
+        listView.setAdapter(cardArrayAdapter);
+
+    }
+
+    /**Locations were added to shared preferences from map
+     * These values are retrieved here using sharedpreferences
+     * Gets the Profile name, latitude and longitude for each profile
+     */
+    private void addFencesFromSharedPref(){
+        shPrefs = getApplicationContext().getSharedPreferences("prefs", Context.MODE_PRIVATE);
+
+        batteryLev=shPrefs.getInt("seekbar", 0);
+        timeProf=shPrefs.getString("Time",null);
+
+        //Home Profile shared preferences
+        homeProf = shPrefs.getString("HomeName", null);
+        latt=shPrefs.getFloat("HomeLatitude", (float) 0);
+        homeLat =(double)latt;
+        longg=shPrefs.getFloat("HomeLongitude", (float) 0);
+        homeLng =(double)longg;
+        homeAddr=shPrefs.getString("HomeAddress",null);
+
+        if(homeProf!=null && homeLat!=null && homeLng!=null&& homeAddr!=null) {
+            Log.d("SharedPredProf", homeProf);
+            Log.d("SharedPredProfAddress", homeAddr);
+            Log.d("SharedPrefLat", String.valueOf(homeLat));
+            Log.d("SharedpRefLong", String.valueOf(homeLng));
+
+            geoFencing.addFence(homeProf, new LatLng(homeLat, homeLng));
+        }
+
+        //Work profile shared preferences
+        workProf = shPrefs.getString("WorkName", null);
+        latt=shPrefs.getFloat("WorkLatitude", (float) 0);
+        homeLat =(double)latt;
+        longg=shPrefs.getFloat("WorkLongitude",(float)0);
+        homeLng =(double)longg;
+        workAddr=shPrefs.getString("WorkAddress",null);
+
+
+        if(workProf!=null && homeLat!=null && homeLng!=null && workAddr!=null) {
+            Log.d("SharedPredProf", homeProf);
+            Log.d("SharedPrefAddr",workAddr);
+            Log.d("SharedPrefLat", String.valueOf(homeLat));
+            Log.d("SharedpRefLong", String.valueOf(homeLng));
+            geoFencing.addFence(workProf, new LatLng(homeLat, homeLng));
+        }
+
+        //Custom Profile shared preferences
+        customProf = shPrefs.getString("CustomName", null);
+        latt=shPrefs.getFloat("CustomLatitude", (float) 0);
+        homeLat =(double)latt;
+
+        longg=shPrefs.getFloat("CustomLongitude",(float)0);
+        homeLng =(double)longg;
+        customAddr=shPrefs.getString("CustomAddress",null);
+
+
+        if(customProf!=null && homeLat!=null && homeLng!=null && customAddr!=null) {
+            Log.d("SharedPredProf", homeProf);
+            Log.d("SharedPrefLat", String.valueOf(homeLat));
+            Log.d("SharedpRefLong", String.valueOf(homeLng));
+            geoFencing.addFence(customProf, new LatLng(homeLat, homeLng));
+        }
+    }
+
+    //Initialize geofences
+    private void initializeGeoFencing() {
+
+        geoFencing=new GeoFencing(this);
+        geoFencing.initialize();
+
+    }
+
+        private void buildFab(){
         final ViewGroup fabContainer = (ViewGroup) findViewById(R.id.fab_container);
         fab = (ImageButton) findViewById(R.id.fab);
         fabaction1 = findViewById(R.id.fab_action_1);
-        fabaction2 = findViewById(R.id.fab_action_2);
-        fabaction3 = findViewById(R.id.fab_action_3);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                expanded = !expanded;
-                if (expanded) {
-                    expandFab();
+            fabaction2 = findViewById(R.id.fab_action_2);
+            fabaction3 = findViewById(R.id.fab_action_3);
+            fab.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    expanded = !expanded;
+                    if (expanded) {
+                        expandFab();
                 } else {
-                    collapseFab();
+                        collapseFab();
+                    }
                 }
-            }
 
 
-        });
+            });
 
-        findViewById(R.id.fab_action_1).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(MainActivity.this, BatteryRem.class);
-                startActivity(intent);
-                Toast toast = Toast.makeText(getApplicationContext(), "Battery", Toast.LENGTH_SHORT);
-                toast.show();
-            }
-        });
+            findViewById(R.id.fab_action_1).setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent intent = new Intent(MainActivity.this, BatteryRem.class);
+                    startActivity(intent);
+                    Toast toast = Toast.makeText(getApplicationContext(), "Battery", Toast.LENGTH_SHORT);
+                    toast.show();
+                }
+            });
 
-        findViewById(R.id.fab_action_2).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(MainActivity.this, AddLocation.class);
-                startActivity(intent);
-                Toast toast = Toast.makeText(getApplicationContext(), "Select Place", Toast.LENGTH_SHORT);
-                toast.show();
-            }
-        });
+            findViewById(R.id.fab_action_2).setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent intent = new Intent(MainActivity.this, AddLocation.class);
+                    startActivity(intent);
+                    Toast toast = Toast.makeText(getApplicationContext(), "Select Place", Toast.LENGTH_SHORT);
+                    toast.show();
+                }
+            });
 
-        findViewById(R.id.fab_action_3).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(MainActivity.this, TimeOfDay.class);
-                startActivity(intent);
-                Toast toast = Toast.makeText(getApplicationContext(), "Time Of Day", Toast.LENGTH_SHORT);
-                toast.show();
-            }
-        });
-
-
+            findViewById(R.id.fab_action_3).setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent intent = new Intent(MainActivity.this, TimeOfDay.class);
+                    startActivity(intent);
+                    Toast toast = Toast.makeText(getApplicationContext(), "Time Of Day", Toast.LENGTH_SHORT);
+                    toast.show();
+                }
+            });
 
 
-        fabContainer.getViewTreeObserver().addOnPreDrawListener(new ViewTreeObserver.OnPreDrawListener() {
-            @Override
-            public boolean onPreDraw() {
-                fabContainer.getViewTreeObserver().removeOnPreDrawListener(this);
-                offset1 = fab.getY() - fabaction1.getY();
-                fabaction1.setTranslationY(offset1);
-                offset2 = fab.getY() - fabaction2.getY();
-                fabaction2.setTranslationY(offset2);
-                offset3 = fab.getY() - fabaction3.getY();
+            fabContainer.getViewTreeObserver().addOnPreDrawListener(new ViewTreeObserver.OnPreDrawListener() {
+                @Override
+                public boolean onPreDraw() {
+                    fabContainer.getViewTreeObserver().removeOnPreDrawListener(this);
+                    offset1 = fab.getY() - fabaction1.getY();
+                    fabaction1.setTranslationY(offset1);
+                    offset2 = fab.getY() - fabaction2.getY();
+                    fabaction2.setTranslationY(offset2);
+                    offset3 = fab.getY() - fabaction3.getY();
                 fabaction3.setTranslationY(offset3);
                 return true;
             }
-        });}
-
-        RecyclerView recyclerView = (RecyclerView) findViewById(R.id.recycler_view);
-
-        /**
-         * If it is known in advance that the physical size of all the items in
-         * the RecyclerView are the same, setting this flag will improve
-         * performance.
-         */
-        //recyclerView.setHasFixedSize(true);
-
-        /**
-         * A LinearLayoutManager arranges the items of the RecyclerView
-         * vertically.
-         */
-       // recyclerView.setLayoutManager(new LinearLayoutManager(this));
-
-        /**
-         * The ItemAdpater manages the data model (i.e., list of strings) for
-         * the RecyclerView. See comments in class ItemAdapter for further
-         * explanations.
-         */
-       // adapter = new ItemAdapter(itemList, this);
-        //recyclerView.setAdapter(adapter);
-
-       // findViewById(R.id.fab).setOnClickListener(new View.OnClickListener() {
-         //   @Override
-           // public void onClick(View v) {
-                /**
-                 * Whenever the user presses the floating action button, this
-                 * callback will be invoked. With each click one more item will
-                 * be added to the list. First the underlying data model will be
-                 * changed and then the adapter is told what has changed. In
-                 * this example items are always added at the top of the list to
-                 * visualize the "insertion animation" (no animation happens
-                 * when items are appended at the end).
-                 */
-                //itemList.add(0, "Profile #" + nextItemNumber++);
-                //adapter.notifyItemInserted(0);
-                //Intent intent = new Intent(MainActivity.this, Triggers.class);
-               // startActivity(intent);
-          //  }
-       // });
-   // }
-
-
-   /* @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_main, menu);
-        return true;
+        });
     }
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
-        }
-
-        return super.onOptionsItemSelected(item);
-    }
-
-    @Override
-    public void onItemClicked(int position) {
-        /**
-         * The ItemAdapter will call this method whenever the user clicks an
-         * item. The item that was clicked will get deleted (in this example
-         * without further user confirmation). Removing is analog to insertion:
-         * first the item is removed from the underlying data model, then the
-         * adapter is told how the data has changed.
-         */
-        //itemList.remove(position);
-        //adapter.notifyItemRemoved(position);
-    //}
     private void collapseFab() {
         fab.setImageResource(R.drawable.animated_minus);
         AnimatorSet animatorSet = new AnimatorSet();
@@ -237,4 +306,17 @@ public class MainActivity extends Activity {
         }
     }
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
 

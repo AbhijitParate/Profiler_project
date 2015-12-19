@@ -31,26 +31,17 @@ public class BatteryRem extends Activity {
 
     private SeekBar sb;
     private TextView textView;
-    private PopupWindow popup;
-    private Button button;
-    GridViewAdapter gview;
     Context context;
     int progress = 0;
     private SharedPreferences mValuePrefs;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-
+    protected void onCreate(Bundle savedInstanceState)
+    {
 
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.battery_rem);
-
-
-        super.onCreate(savedInstanceState);
-        AlarmReceiverTest mBatteryLevelReceiver = new AlarmReceiverTest();
-        registerReceiver(mBatteryLevelReceiver, new IntentFilter(
-                Intent.ACTION_BATTERY_CHANGED));
 
 
         sb = (SeekBar) findViewById(R.id.seekBar);
@@ -59,105 +50,39 @@ public class BatteryRem extends Activity {
 
 
         textView.setText("Selected: " + sb.getProgress() + "%");
-        button= (Button)findViewById(R.id.button_set);
-        button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-
-                // custom dialog
-                final Dialog dialog = new Dialog(BatteryRem.this, R.style.AppTheme);
-                dialog.setContentView(R.layout.preferences);
-                dialog.setTitle("Preferences");
-
-
-                GridView gridView = (GridView) dialog.findViewById(R.id.gridView);
-
-               /* View imageView = null;
-                */
-
-                gridView.setAdapter(new GridViewAdapter(getApplication()));
-                gridView.setNumColumns(4);
-                gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                    @Override
-                    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-
-                    }
-                });
-                dialog.show();
-                Button closeButton = (Button)dialog.findViewById(R.id.button_cancel);
-                closeButton.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        dialog.dismiss();
-                    }
-                });
-
-                //
-            }
-        });
-
 
 
         sb.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener()
+        {
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int progresValue, boolean fromUser)
+            {
 
-                                      {
+                progress = progresValue;
 
+            }
 
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar)
+            {
 
-
-                                          @Override
-
-                                          public void onProgressChanged(SeekBar seekBar, int progresValue, boolean fromUser) {
-
-                                              progress = progresValue;
-
-
-                                          }
-
-                                          @Override
-
-                                          public void onStartTrackingTouch(SeekBar seekBar) {
+            }
 
 
-                                          }
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar)
+            {
+                textView.setText("Selected: " + progress + "%");
+                progress = seekBar.getProgress();
+                //Saving values to shared preferences
+                SharedPreferences.Editor editor = mValuePrefs.edit();
+                editor.putInt("seekbar", progress);
+                Log.d("SeekBAR: ",Integer.toString(progress));
+                editor.apply();
 
-                                          @Override
-                                          public void onStopTrackingTouch(SeekBar seekBar) {
-                                          textView.setText("Selected: " + progress + "%");
-                                              progress = seekBar.getProgress();
-                                              //Save value in shared prefs
-//                                              mValuePrefs=context.getSharedPreferences()
-
-                                              SharedPreferences.Editor editor = mValuePrefs.edit();
-                                              editor.clear();
-                                              editor.putInt("seekbar", progress);
-                                              Log.d("SeekBAR: ",Integer.toString(progress));
-                                              editor.commit();
-
-
-
-                                      }
-
-                                  }
-
-    );
-
-}
-
-    public void scheduleAlarmBattery(View V)
-    {
-
-
-
-        // create the object
-        AlarmManager alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
-        Intent intentAlarm = new Intent(this, AlarmReceiverTest.class);
-        //set the alarm for particular time
-        alarmManager.set(AlarmManager.RTC_WAKEUP, progress, PendingIntent.getBroadcast(this, 1, intentAlarm, PendingIntent.FLAG_UPDATE_CURRENT));
-        Toast.makeText(BatteryRem.this, "Settings will be activated in a minute", Toast.LENGTH_LONG).show();
+            }
+        });
 
     }
-
 
     }

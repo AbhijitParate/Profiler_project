@@ -54,7 +54,7 @@ public class MapViewer extends AppCompatActivity{
 
     HttpURLConnection urlConnection=null;
     boolean canGetLocation = false;
-    DBHelper dbHelper;
+    //DBHelper dbHelper;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -127,15 +127,12 @@ public class MapViewer extends AppCompatActivity{
 
         SearchView.OnQueryTextListener queryTextListener = new SearchView.OnQueryTextListener() {
             public boolean onQueryTextChange(String newText) {
-                // this is your adapter that will be filtered
                 Log.v("LISTENER","onQueryTextChange called - "+newText);
                 return true;
             }
 
             public boolean onQueryTextSubmit(String query) {
-                //Here u can get the value "query" which is entered in the search box.
-                //textview.setText(query);
-                //opensearch();
+
                 Log.v("LISTENER", "OnQuerySubmit called - " + query);
                 hideSoftKeyboard(MapViewer.this);
                 MapSearch mapSearch = new MapSearch();
@@ -158,7 +155,6 @@ public class MapViewer extends AppCompatActivity{
         double latitude = location.getLatitude();
         double longitude = location.getLongitude();
         LatLng latLng = new LatLng(latitude, longitude);
-        //mMap.addMarker(new MarkerOptions().position(latLng).draggable(true).flat(true));
         mMap.moveCamera(CameraUpdateFactory.newLatLng(latLng));
         mMap.animateCamera(CameraUpdateFactory.zoomTo(15));
 
@@ -166,7 +162,6 @@ public class MapViewer extends AppCompatActivity{
                 .title("You are here")
                 .snippet(String.valueOf(latLng))
                 .draggable(true));
-        //.icon(BitmapDescriptorFactory.fromResource(R.drawable.mark_start)));
         mMap.setOnMarkerDragListener(new GoogleMap.OnMarkerDragListener() {
 
             @Override
@@ -174,9 +169,6 @@ public class MapViewer extends AppCompatActivity{
                 // TODO Auto-generated method stub
                 Log.d("Marker", "Dragging");
             }
-
-
-
 
             @Override
             public void onMarkerDragEnd(Marker arg0) {
@@ -194,8 +186,7 @@ public class MapViewer extends AppCompatActivity{
 
             }
         });
-       // locationTv.setText("Latitude:" + latitude + ", Longitude:" + longitude);
-    }
+       }
 
     public class MapSearch extends AsyncTask<String, Void, HashMap<String,String>> {
 
@@ -203,8 +194,8 @@ public class MapViewer extends AppCompatActivity{
         @Override
         protected HashMap<String,String> doInBackground(String... params) {
             HashMap<String,String> location = new HashMap<String,String>();
-            Log.v("LISTENER","doInBackground called - "+"");
             String apiKey = "AIzaSyAUSETHO5_4d_lGrGfjX4vAowf6DrqaNmk";
+
             try {
                 final String GOOGLE_BASE_URL = "https://maps.googleapis.com/maps/api/place/textsearch/json?";
                 final String QUERY_PARAM = "query";
@@ -219,7 +210,6 @@ public class MapViewer extends AppCompatActivity{
                 urlConnection = (HttpURLConnection) url.openConnection();
                 urlConnection.setRequestMethod("GET");
                 urlConnection.connect();
-
 
                 InputStream inputStream = urlConnection.getInputStream();
                 StringBuffer buffer = new StringBuffer();
@@ -267,41 +257,39 @@ public class MapViewer extends AppCompatActivity{
         }
     }
 
-
-
-    private boolean isGooglePlayServicesAvailable() {
-        int status = GooglePlayServicesUtil.isGooglePlayServicesAvailable(this);
-        if (ConnectionResult.SUCCESS == status) {
-            return true;
-        } else {
-            GooglePlayServicesUtil.getErrorDialog(status, this, 0).show();
-            return false;
+        private boolean isGooglePlayServicesAvailable() {
+            int status = GooglePlayServicesUtil.isGooglePlayServicesAvailable(this);
+            if (ConnectionResult.SUCCESS == status) {
+                return true;
+            } else {
+                GooglePlayServicesUtil.getErrorDialog(status, this, 0).show();
+                return false;
+            }
         }
-    }
 
-    public double getLatitudeVal(){
-        if(location!=null){
-            latitude = location.getLatitude();
+        public double getLatitudeVal(){
+            if(location!=null){
+                latitude = location.getLatitude();
+            }
+            return latitude;
         }
-        return latitude;
-    }
 
-    public double getLongitudeVal(){
-        if(location!=null){
-            longitude = location.getLongitude();
+        public double getLongitudeVal(){
+            if(location!=null){
+                longitude = location.getLongitude();
+            }
+            return longitude;
         }
-        return longitude;
-    }
 
-    public boolean canGetLocationCheck(){
-        return this.canGetLocation;
-    }
+        public boolean canGetLocationCheck(){
+            return this.canGetLocation;
+        }
 
-    @Override
-    protected void onResume() {
-        super.onResume();
-        setUpMapIfNeeded();
-    }
+        @Override
+        protected void onResume() {
+            super.onResume();
+            setUpMapIfNeeded();
+        }
 
     /* /**
       * Sets up the map if it is possible to do so (i.e., the Google Play services APK is correctly

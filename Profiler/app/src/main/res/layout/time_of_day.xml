@@ -9,25 +9,11 @@
         android:id="@+id/textView1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true"
 
-        android:textAppearance="?android:attr/textAppearanceMedium" />
-    <!--android:layout_centerHorizontal="true"
-        android:layout_above="@+id/set_button"
-        android:layout_marginBottom="10dp"
-         android:text="@string/pick_time"
-
-        -->
-    <TimePicker
-        android:id="@+id/timePicker1"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:scaleY="0.5"
-        android:scaleX="0.5"
-        android:layout_alignParentTop="true"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:layout_below="@+id/set_button"
         android:layout_alignParentStart="true"
-        android:layout_alignEnd="@+id/textView1" />
+        android:layout_marginTop="40dp" />
 
     <Button
         android:id="@+id/set_button"
@@ -35,47 +21,28 @@
         android:layout_height="wrap_content"
         android:onClick="setTimeFrom"
         android:text="@string/time_set_from"
-        android:layout_below="@+id/textView1"
-        android:layout_alignParentEnd="true" />
+        android:layout_alignBottom="@+id/timePicker1"
+        android:layout_alignParentEnd="true"
+        android:layout_marginBottom="103dp" />
 
-    <TextView
-        android:id="@+id/textView2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceMedium"
-        android:layout_below="@+id/timePicker2" />
 
-    <Button
-        android:id="@+id/set_button_2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:onClick="setTimeTo"
-        android:text="@string/time_set_to"
-
-        android:layout_below="@+id/timePicker1"
-        android:layout_alignParentEnd="true" />
-
-    <TimePicker
-        android:id="@+id/timePicker2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:scaleY="0.5"
-        android:scaleX="0.5"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentStart="true"
-        android:layout_alignEnd="@+id/textView1" />
 
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Set Night Mode"
         android:id="@+id/sleep_mode"
-        android:layout_alignBottom="@+id/textView2"
-        android:layout_toStartOf="@+id/set_button_2"
         android:onClick="scheduleAlarm"
-       />
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true" />
+
+    <TimePicker
+        android:id="@+id/timePicker1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_toStartOf="@+id/set_button" />
+
+
 
 </RelativeLayout>
-
-
-

@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.media.AudioManager;
 import android.net.wifi.WifiManager;
+import android.provider.Settings;
 import android.widget.Toast;
 
 /**
@@ -24,20 +25,33 @@ public class AlarmReciever extends BroadcastReceiver {
         // TODO Auto-generated method stub
         mContext=context;
 
-        // here you can start an activity or service depending on your need
+        // Turn Wifi off
         WifiManager wifi = (WifiManager)context.getSystemService(Context.WIFI_SERVICE);
-        wifi.setWifiEnabled(true);
+        wifi.setWifiEnabled(false);
 
+        //Turn Phone Ringer to Silent
         audio = (AudioManager)mContext.getSystemService(Context.AUDIO_SERVICE);
-
         audio.setRingerMode(AudioManager.RINGER_MODE_SILENT);
 
-
+        //Turn Bluetooth on
         final BluetoothAdapter bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
-        bluetoothAdapter.enable();
+        bluetoothAdapter.disable();
 
-        // Show the toast  like in above screen shot
+        //Set Brightness to 50/255
+        setBrightness(50);
+
         Toast.makeText(context, "Alarm Triggered and actions performed", Toast.LENGTH_LONG).show();
+    }
+
+    //Set Brightness
+    private void setBrightness(int brightness) {
+        android.provider.Settings.System.putInt(mContext.getContentResolver(),
+                Settings.System.SCREEN_BRIGHTNESS_MODE,
+                Settings.System.SCREEN_BRIGHTNESS_MODE_MANUAL);
+
+        android.provider.Settings.System.putInt(mContext.getContentResolver(),
+                android.provider.Settings.System.SCREEN_BRIGHTNESS,
+                brightness);
     }
 
 }

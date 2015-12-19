@@ -33,7 +33,7 @@
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:textAppearance="?android:attr/textAppearanceMedium"
-    android:text="Home"
+    android:text="@string/home"
     android:id="@+id/textHome"
     android:layout_toEndOf="@+id/homeButton"
     android:layout_below="@+id/imageView" />

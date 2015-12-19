@@ -8,6 +8,7 @@
     <string name="checking">Checking</string>
     <string name="title_MapViewer">Map View</string>
     <string name="add_location">Select Place</string>
+    <string name="geofencing">GeoFencing</string>
 
     <string name="time_set_from">Set</string>
     <string name="time_set_to">Set</string>
@@ -18,7 +19,7 @@
     <string name="entering_geofence">Entering the GeoFence zone</string>
     <string name="exiting_geofence">Exiting the GeoFence zone</string>
 
-    <string name="not_connected">GoogleApiClient no yet connected. Try again.</string>
+    <string name="not_connected">GoogleApiClient not yet connected. Try again.</string>
     <string name="geofence_not_available">Geofence service is not available now</string>
     <string name="geofence_too_many_geofences">Your app has registered too many geofences</string>
     <string name="geofence_too_many_pending_intents">
@@ -36,5 +37,5 @@
     <string name="unknown_geofence_transition">Unknown Transition</string>
 
     <string name="geofence_transition_notification_text">Click notification to return to app</string>
-
+   <string name="home">Home</string>
 </resources>

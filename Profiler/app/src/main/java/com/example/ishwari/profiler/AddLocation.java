@@ -35,8 +35,8 @@ public class AddLocation extends Activity {
         TextView textview2=(TextView)findViewById(R.id.textHome);
         TextView textview3=(TextView)findViewById(R.id.textView3);
         TextView textview4=(TextView)findViewById(R.id.workTextView);
-        TextView textview5 = (TextView) findViewById(R.id.textView5);
 
+        //Select Home Location
         findViewById(R.id.homeButton).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -47,6 +47,8 @@ public class AddLocation extends Activity {
                 toast.show();
             }
         });
+
+        //Select Work Location
         findViewById(R.id.workButton).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -57,6 +59,8 @@ public class AddLocation extends Activity {
                 toast.show();
             }
         });
+
+        //Select Custom Place Location
         findViewById(R.id.customButton).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
