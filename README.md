@@ -1,13 +1,13 @@
 # Profiler_project
-About
+##About
 
 Profiler allows a user to customize user's phone’s settings that will be activated automatically based on the battery charging left, time of the day and the user's current location.
 
-Wiki
+##Wiki
 
 The Journal is in the Wiki section of this repository.
 
-Collaborators
+##Collaborators
 
 Siddhartha Sankasala
 Ishwari Shevade
